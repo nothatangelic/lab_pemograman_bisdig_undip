@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RespondenKu — Platform Responden Riset Mahasiswa</title>
+  <style>
+    :root {
+      --bg: #eef2ff;
+      --bg-grad: radial-gradient(circle at top right, #e0e7ff 0%, #f0fdfa 42%, #f8fafc 100%);
+      --surface: #ffffff;
+      --surface-subtle: #f5f3ff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #c7d2fe;
+      --primary: #4f46e5;
+      --primary-2: #7c3aed;
+      --teal: #0d9488;
+      --amber: #d97706;
+      --ok-bg: #dcfce7;
+      --ok-text: #15803d;
+      --warn-bg: #fef3c7;
+      --warn-text: #b45309;
+      --bad-bg: #ffe4e6;
+      --bad-text: #be123c;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background: var(--bg-grad);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 16px 48px;
+    }
+
+    /* Colorful Hero Header */
+    header {
+      background: linear-gradient(120deg, #312e81 0%, #4f46e5 52%, #0f766e 100%);
+      color: #ffffff;
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.22);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 17px;
+    }
+
+    .brand h1 {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    .brand span {
+      font-size: 12px;
+      color: #e0e7ff;
+    }
+
+    .user-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      backdrop-filter: blur(6px);
+    }
+
+    .pill-gold {
+      background: #fef08a;
+      border-color: #fde047;
+      color: #713f12;
+      font-weight: 600;
+    }
+
+    .pill strong { font-weight: 800; }
+
+    select, input, textarea {
+      width: 100%;
+      padding: 9px 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+    }
+
+    header select {
+      width: auto;
+      padding: 6px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #ffffff;
+      color: #1e1b4b;
+      border-color: #ffffff;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.16);
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 5px;
+    }
+
+    /* Navigation Tabs */
+    nav {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      background: #ffffff;
+      border: 1px solid #ddd6fe;
+      color: #4338ca;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn:hover {
+      background: #eef2ff;
+      transform: translateY(-1px);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.28);
+    }
+
+    /* Cards & Layout */
+    .card {
+      background: var(--surface);
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
+
+    .card.teal-accent { border-left-color: var(--teal); }
+    .card.purple-accent { border-left-color: var(--primary-2); }
+
+    .card-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .card-title { font-size: 15px; font-weight: 700; color: #0f172a; }
+    .muted { color: var(--muted); font-size: 12px; }
+
+    /* Match Progress Bar */
+    .progress-track {
+      width: 100%;
+      height: 7px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 8px 0 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0d9488, #4f46e5);
+    }
+
+    .progress-fill.mid {
+      background: linear-gradient(90deg, #f59e0b, #ea580c);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .stat-box {
+      background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
+      border: 1px solid #e0e7ff;
+      border-top: 4px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 15px;
+    }
+
+    .stat-box.teal {
+      background: linear-gradient(180deg, #ffffff 0%, #f0fdfa 100%);
+      border-color: #ccfbf1;
+      border-top-color: var(--teal);
+    }
+
+    .stat-box.amber {
+      background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%);
+      border-color: #fde68a;
+      border-top-color: var(--amber);
+    }
+
+    .stat-box .num { font-size: 22px; font-weight: 800; margin-top: 3px; color: #1e1b4b; }
+
+    /* Buttons & Badges */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid #c7d2fe;
+      background: #eef2ff;
+      color: #312e81;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover { background: #e0e7ff; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--teal));
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 3px 10px rgba(13, 148, 136, 0.25);
+    }
+
+    .btn-primary:hover { filter: brightness(1.06); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .b-ok { background: var(--ok-bg); color: var(--ok-text); }
+    .b-warn { background: var(--warn-bg); color: var(--warn-text); }
+    .b-bad { background: var(--bad-bg); color: var(--bad-text); }
+    .b-info { background: #e0e7ff; color: #3730a3; }
+
+    .reward-tag {
+      background: #ccfbf1;
+      color: #0f766e;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .form-group { margin-bottom: 12px; }
+    .row-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+    /* Modal / Drawer Overlay */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 27, 75, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 2px solid #c7d2fe;
+      width: 100%;
+      max-width: 540px;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-shadow: 0 16px 36px rgba(30, 27, 75, 0.24);
+    }
+
+    .alert {
+      padding: 11px 13px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-bottom: 12px;
+      border: 1px solid transparent;
+      font-weight: 500;
+    }
+    .alert-info { background: #e0e7ff; color: #1e1b4b; border-color: #a5b4fc; }
+    .alert-warn { background: var(--warn-bg); color: var(--warn-text); border-color: #fcd34d; }
+    .alert-bad { background: var(--bad-bg); color: var(--bad-text); border-color: #fda4af; }
+
+    .notice-toast {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      background: linear-gradient(135deg, #312e81, #0f766e);
+      color: #fff;
+      padding: 11px 15px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+      z-index: 100;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
+    }
+
+    .notice-toast.show { opacity: 1; transform: translateY(0); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th, td {
+      text-align: left;
+      padding: 9px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    th {
+      color: #312e81;
+      font-weight: 700;
+      background: #eef2ff;
+    }
+    .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid #e2e8f0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">R</div>
+        <div>
+          <h1>RespondenKu</h1>
+          <span>Pencarian & Validasi Responden Riset Mahasiswa</span>
+        </div>
+      </div>
+
+      <div class="user-bar">
+        <select id="userSwitcher" aria-label="Pilih Akun Pengguna">
+          <option value="u1">Nadia Putri (S1 Bisnis Digital, 21 thn, Semarang)</option>
+          <option value="u2">Raka Pratama (S1 Manajemen, 22 thn, Yogyakarta)</option>
+          <option value="u3">Dina Maharani (S1 Sistem Informasi, 20 thn, Bandung)</option>
+        </select>
+        <div class="pill pill-gold">Poin: <strong id="userPoints">0</strong></div>
+        <div class="pill">Terisi: <strong id="userFilledCount">0</strong> survei</div>
+      </div>
+    </header>
+
+    <nav id="navTabs">
+      <button class="tab-btn active" data-tab="cari">Cari Survei</button>
+      <button class="tab-btn" data-tab="buat">Buat Survei</button>
+      <button class="tab-btn" data-tab="riwayat">Status Respons Saya</button>
+      <button class="tab-btn" data-tab="kelola">Kelola Survei & Moderasi</button>
+      <button class="tab-btn" data-tab="testing">Metrik Uji Coba</button>
+    </nav>
+
+    <main id="appView"></main>
+  </div>
+
+  <!-- Modal Alur Screening & Pengisian Survei -->
+  <div class="modal-backdrop" id="surveyModal">
+    <div class="modal" id="modalContent"></div>
+  </div>
+
+  <div class="notice-toast" id="toast"></div>
+
+  <script>
+    const STORAGE_KEY = "respondenku_v3_state";
+
+    const DEFAULT_STATE = {
+      currentUserId: "u1",
+      activeTab: "cari",
+      users: [
+        {
+          id: "u1",
+          name: "Nadia Putri",
+          email: "nadia.putri@students.undip.ac.id",
+          age: 21,
+          city: "Semarang",
+          habit: "E-Wallet & Belanja Online",
+          points: 25,
+          filledCount: 2,
+          credibility: 95
+        },
+        {
+          id: "u2",
+          name: "Raka Pratama",
+          email: "raka.pratama@mail.ugm.ac.id",
+          age: 22,
+          city: "Yogyakarta",
+          habit: "Transportasi Online & PayLater",
+          points: 40,
+          filledCount: 3,
+          credibility: 98
+        },
+        {
+          id: "u3",
+          name: "Dina Maharani",
+          email: "dina.maharani@students.itb.ac.id",
+          age: 20,
+          city: "Bandung",
+          habit: "E-Commerce & Streaming",
+          points: 10,
+          filledCount: 1,
+          credibility: 88
+        }
+      ],
+      surveys: [
+        {
+          id: "s1",
+          ownerId: "u2",
+          title: "Minat Penggunaan PayLater di Kalangan Mahasiswa",
+          researcher: "Raka Pratama • S1 Manajemen",
+          minAge: 20,
+          maxAge: 25,
+          city: "Semua Kota",
+          habitKeyword: "PayLater",
+          quota: 25,
+          rewardPoints: 15,
+          externalUrl: "https://docs.google.com/forms/d/e/contoh-survei-paylater",
+          verificationCode: "PAYLATER26",
+          screeningQuestion: "Apakah Anda pernah menggunakan atau mengecek fitur PayLater dalam 3 bulan terakhir?",
+          screeningExpected: "ya",
+          mainQuestion: "Apa pertimbangan utama Anda sebelum memakai layanan PayLater untuk kebutuhan harian?",
+          attentionCheck: "Untuk memastikan ketelitian membaca, pilih opsi 'Ya, saya membaca' pada bagian ini.",
+          attentionExpected: "ya"
+        },
+        {
+          id: "s2",
+          ownerId: "u3",
+          title: "Pengalaman Transaksi E-Wallet Mahasiswa Kota Pelajar",
+          researcher: "Dina Maharani • S1 Sistem Informasi",
+          minAge: 19,
+          maxAge: 23,
+          city: "Semarang",
+          habitKeyword: "E-Wallet",
+          quota: 20,
+          rewardPoints: 10,
+          externalUrl: "https://docs.google.com/forms/d/e/contoh-survei-ewallet",
+          verificationCode: "EWALLET26",
+          screeningQuestion: "Apakah Anda berdomisili/kuliah di Semarang dan aktif memakai e-wallet minimal 2x seminggu?",
+          screeningExpected: "ya",
+          mainQuestion: "Kendala apa yang paling sering Anda temui saat transaksi e-wallet?",
+          attentionCheck: "Pilih opsi 'Ya, saya membaca' untuk validasi instrumen.",
+          attentionExpected: "ya"
+        }
+      ],
+      responses: [
+        {
+          id: "r1",
+          surveyId: "s1",
+          respondentId: "u1",
+          respondentName: "Nadia Putri",
+          answer: "Takut bunga tersembunyi dan ingin menjaga pengeluaran bulanan tetap terkontrol.",
+          durationSec: 18,
+          codeMatched: true,
+          attentionPassed: true,
+          status: "Tervalidasi",
+          pointsAwarded: 15,
+          createdAt: "Hari ini, 10:15"
+        },
+        {
+          id: "r2",
+          surveyId: "s2",
+          respondentId: "u3",
+          respondentName: "Dina Maharani",
+          answer: "Kadang saldo tertunda saat top-up dari bank daerah pada jam sibuk.",
+          durationSec: 5,
+          codeMatched: true,
+          attentionPassed: true,
+          status: "Pending",
+          pointsAwarded: 10,
+          createdAt: "Hari ini, 11:02"
+        }
+      ],
+      telemetry: [
+        { step: "Buka Katalog", user: "Nadia Putri", outcome: "Sukses", note: "Melihat kecocokan kriteria" },
+        { step: "Pre-Screening", user: "Nadia Putri", outcome: "Lolos", note: "Memenuhi kriteria awal" },
+        { step: "Submit Respons", user: "Nadia Putri", outcome: "Tervalidasi", note: "Durasi 18 detik & kode cocok" }
+      ]
+    };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return structuredClone(DEFAULT_STATE);
+        return JSON.parse(raw);
+      } catch (e) {
+        return structuredClone(DEFAULT_STATE);
+      }
+    }
+
+    let state = loadState();
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    }
+
+    function showToast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => el.classList.remove("show"), 2600);
+    }
+
+    function logTelemetry(step, outcome, note) {
+      const u = getCurrentUser();
+      state.telemetry.unshift({
+        step,
+        user: u.name,
+        outcome,
+        note
+      });
+      state.telemetry = state.telemetry.slice(0, 30);
+      saveState();
+    }
+
+    function getCurrentUser() {
+      return state.users.find(u => u.id === state.currentUserId) || state.users[0];
+    }
+
+    function calcMatchScore(user, survey) {
+      let score = 0;
+      const reasons = [];
+
+      const ageOk = user.age >= survey.minAge && user.age <= survey.maxAge;
+      if (ageOk) {
+        score += 34;
+        reasons.push(`Usia ${user.age} thn sesuai (${survey.minAge}–${survey.maxAge})`);
+      } else {
+        reasons.push(`Usia ${user.age} thn di luar ${survey.minAge}–${survey.maxAge}`);
+      }
+
+      const cityOk = survey.city === "Semua Kota" || user.city.toLowerCase() === survey.city.toLowerCase();
+      if (cityOk) {
+        score += 33;
+        reasons.push(`Domisili ${user.city} sesuai`);
+      } else {
+        reasons.push(`Target kota: ${survey.city}`);
+      }
+
+      const habitOk = !survey.habitKeyword || user.habit.toLowerCase().includes(survey.habitKeyword.toLowerCase());
+      if (habitOk) {
+        score += 33;
+        reasons.push(`Minat/kebiasaan cocok (${survey.habitKeyword})`);
+      } else {
+        reasons.push(`Target kebiasaan: ${survey.habitKeyword}`);
+      }
+
+      return { score, reasons, eligible: ageOk && cityOk && habitOk };
+    }
+
+    function renderHeader() {
+      const u = getCurrentUser();
+      document.getElementById("userSwitcher").value = u.id;
+      document.getElementById("userPoints").textContent = u.points;
+      document.getElementById("userFilledCount").textContent = u.filledCount;
+
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === state.activeTab);
+      });
+    }
+
+    function renderView() {
+      renderHeader();
+      const view = document.getElementById("appView");
+      if (state.activeTab === "cari") view.innerHTML = viewCariSurvei();
+      else if (state.activeTab === "buat") view.innerHTML = viewBuatSurvei();
+      else if (state.activeTab === "riwayat") view.innerHTML = viewRiwayatRespons();
+      else if (state.activeTab === "kelola") view.innerHTML = viewKelolaSurvei();
+      else if (state.activeTab === "testing") view.innerHTML = viewMetrikTesting();
+      bindEvents();
+    }
+
+    function viewCariSurvei() {
+      const u = getCurrentUser();
+      const barRequirementMet = u.filledCount >= 1;
+
+      const cards = state.surveys.map((s, idx) => {
+        const match = calcMatchScore(u, s);
+        const alreadySubmitted = state.responses.some(r => r.surveyId === s.id && r.respondentId === u.id);
+        const badgeClass = match.score >= 67 ? "b-ok" : "b-warn";
+        const cardAccent = idx % 2 === 1 ? "teal-accent" : "purple-accent";
+
+        return `
+          <div class="card ${cardAccent}">
+            <div class="card-header">
+              <div>
+                <div class="card-title">${escapeHtml(s.title)}</div>
+                <div class="muted">${escapeHtml(s.researcher)} • Kuota ${s.quota} responden</div>
+              </div>
+              <span class="badge ${badgeClass}">${match.score}% Cocok</span>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-fill ${match.score < 67 ? "mid" : ""}" style="width: ${match.score}%;"></div>
+            </div>
+
+            <div class="muted" style="margin-bottom: 10px;">
+              Kriteria: Usia ${s.minAge}–${s.maxAge} thn • Kota: ${escapeHtml(s.city)} • Kebiasaan: ${escapeHtml(s.habitKeyword || "Umum")}
+            </div>
+
+            <div class="muted" style="margin-bottom: 12px;">
+              ${match.reasons.map(r => `• ${escapeHtml(r)}`).join("<br>")}
+            </div>
+
+            <div class="card-header" style="margin-bottom: 0; align-items: center;">
+              <span class="reward-tag">+${s.rewardPoints} Poin</span>
+              ${
+                alreadySubmitted
+                  ? `<span class="badge b-info">Sudah Diisi</span>`
+                  : `<button class="btn btn-primary btn-sm" data-start-survey="${s.id}">Mulai Pre-Screening</button>`
+              }
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      return `
+        ${
+          !barRequirementMet
+            ? `<div class="alert alert-warn">Aturan barter riset: isi minimal 1 survei untuk membuka akses publikasi survei sendiri secara penuh.</div>`
+            : ""
+        }
+        <div class="grid-2">${cards}</div>
+      `;
+    }
+
+    function viewBuatSurvei() {
+      const u = getCurrentUser();
+      return `
+        <div class="card purple-accent">
+          <div class="card-title" style="margin-bottom: 4px;">Publikasikan Kebutuhan Responden</div>
+          <p class="muted" style="margin-bottom: 16px;">
+            Peneliti: <strong>${escapeHtml(u.name)}</strong> • Sertakan tautan kuesioner eksternal (Google Form/Typeform) dan kode verifikasi akhir agar responden dapat divalidasi.
+          </p>
+
+          <form id="createSurveyForm">
+            <div class="form-group">
+              <label>Judul Penelitian / Survei</label>
+              <input type="text" name="title" required placeholder="Contoh: Faktor Kepercayaan Pengguna Dompet Digital Mahasiswa" />
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Usia Minimum Responden</label>
+                <input type="number" name="minAge" min="17" max="40" value="18" required />
+              </div>
+              <div class="form-group">
+                <label>Usia Maksimum Responden</label>
+                <input type="number" name="maxAge" min="17" max="50" value="25" required />
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Domisili / Kota Target</label>
+                <select name="city" style="width: 100%; padding: 9px 11px; font-size: 13px;">
+                  <option value="Semua Kota">Semua Kota</option>
+                  <option value="Semarang">Semarang</option>
+                  <option value="Yogyakarta">Yogyakarta</option>
+                  <option value="Bandung">Bandung</option>
+                  <option value="Jakarta">Jakarta</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Kata Kunci Kebiasaan / Kriteria</label>
+                <input type="text" name="habitKeyword" value="E-Wallet" placeholder="Contoh: E-Wallet, PayLater, Kos" />
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Target Kuota Responden</label>
+                <input type="number" name="quota" min="5" max="500" value="30" required />
+              </div>
+              <div class="form-group">
+                <label>Poin Imbalan per Responden</label>
+                <input type="number" name="rewardPoints" min="5" max="100" value="15" required />
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Tautan Form Eksternal (Opsional)</label>
+                <input type="url" name="externalUrl" placeholder="https://forms.gle/..." />
+              </div>
+              <div class="form-group">
+                <label>Kode Verifikasi Akhir Form</label>
+                <input type="text" name="verificationCode" value="RISET26" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Pertanyaan Gerbang Pre-Screening (Syarat Wajib Lolos)</label>
+              <input type="text" name="screeningQuestion" required value="Apakah Anda memenuhi kriteria utama partisipan pada penelitian ini?" />
+            </div>
+
+            <div class="form-group">
+              <label>Jawaban Pre-Screening yang Diloloskan</label>
+              <select name="screeningExpected" style="width: 100%; padding: 9px 11px; font-size: 13px;">
+                <option value="ya">Ya</option>
+                <option value="tidak">Tidak</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Pertanyaan Inti / Ringkasan Jawaban Responden</label>
+              <textarea name="mainQuestion" rows="2" required>Tuliskan pengalaman atau pendapat singkat Anda terkait topik penelitian ini.</textarea>
+            </div>
+
+            <div class="row-actions">
+              <button type="submit" class="btn btn-primary">Terbitkan Survei</button>
+            </div>
+          </form>
+        </div>
+      `;
+    }
+
+    function viewRiwayatRespons() {
+      const u = getCurrentUser();
+      const myResp = state.responses.filter(r => r.respondentId === u.id);
+
+      if (!myResp.length) {
+        return `
+          <div class="card teal-accent">
+            <div class="card-title">Belum Ada Riwayat Respons</div>
+            <p class="muted" style="margin-top: 4px;">Silakan buka tab <strong>Cari Survei</strong> untuk mulai mengisi survei yang sesuai kriteria.</p>
+          </div>
+        `;
+      }
+
+      const rows = myResp.map(r => {
+        const s = state.surveys.find(item => item.id === r.surveyId);
+        const badgeClass =
+          r.status === "Tervalidasi" ? "b-ok" : r.status === "Ditolak" ? "b-bad" : "b-warn";
+
+        return `
+          <tr>
+            <td><strong>${escapeHtml(s ? s.title : "Survei")}</strong><br><span class="muted">${escapeHtml(r.createdAt)}</span></td>
+            <td>${r.durationSec} detik</td>
+            <td>${r.codeMatched ? "Cocok" : "Tidak Cocok"}</td>
+            <td><span class="reward-tag">+${r.status === "Ditolak" ? 0 : r.pointsAwarded} poin</span></td>
+            <td><span class="badge ${badgeClass}">${escapeHtml(r.status)}</span></td>
+          </tr>
+        `;
+      }).join("");
+
+      return `
+        <div class="card teal-accent">
+          <div class="card-title" style="margin-bottom: 12px;">Status Respons & Poin Saya</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Judul Survei</th>
+                  <th>Durasi</th>
+                  <th>Kode</th>
+                  <th>Poin</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function viewKelolaSurvei() {
+      const u = getCurrentUser();
+      const mySurveys = state.surveys.filter(s => s.ownerId === u.id);
+      const relatedResponses = state.responses.filter(r =>
+        mySurveys.some(s => s.id === r.surveyId)
+      );
+
+      const surveyListHtml = mySurveys.length
+        ? mySurveys.map(s => {
+            const count = state.responses.filter(r => r.surveyId === s.id).length;
+            return `
+              <div class="card teal-accent" style="margin-bottom: 10px; background: #f8fafc;">
+                <div class="card-header" style="margin-bottom: 4px;">
+                  <strong>${escapeHtml(s.title)}</strong>
+                  <span class="badge b-info">${count} / ${s.quota} Respons</span>
+                </div>
+                <div class="muted">Kode Verifikasi: <strong>${escapeHtml(s.verificationCode)}</strong> • Imbalan: ${s.rewardPoints} poin</div>
+              </div>
+            `;
+          }).join("")
+        : `<p class="muted" style="margin-bottom: 14px;">Anda belum membuat survei atas akun ini. Gunakan tab <strong>Buat Survei</strong> atau tinjau seluruh respons di bawah.</p>`;
+
+      const moderationRows = (relatedResponses.length ? relatedResponses : state.responses).map(r => {
+        const s = state.surveys.find(item => item.id === r.surveyId);
+        const speedFlag = r.durationSec < 6 ? `<span class="badge b-bad">Terlalu Cepat (${r.durationSec}d)</span>` : `<span class="badge b-ok">Wajar (${r.durationSec}d)</span>`;
+        const statusBadge =
+          r.status === "Tervalidasi" ? "b-ok" : r.status === "Ditolak" ? "b-bad" : "b-warn";
+
+        return `
+          <tr>
+            <td>
+              <strong>${escapeHtml(r.respondentName)}</strong><br>
+              <span class="muted">${escapeHtml(s ? s.title : "")}</span>
+            </td>
+            <td>${escapeHtml(r.answer)}</td>
+            <td>${speedFlag}</td>
+            <td><span class="badge ${statusBadge}">${escapeHtml(r.status)}</span></td>
+            <td>
+              <div class="row-actions" style="margin-top: 0;">
+                <button class="btn btn-sm" data-moderate="${r.id}" data-action="Tervalidasi">Validasi</button>
+                <button class="btn btn-sm" data-moderate="${r.id}" data-action="Ditolak">Tolak</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      return `
+        <div class="card purple-accent">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Survei Milik Anda</div>
+              <p class="muted">Pantau kuota dan kode verifikasi kuesioner</p>
+            </div>
+            <button class="btn btn-sm" id="exportCsvBtn">Unduh Dataset CSV</button>
+          </div>
+          ${surveyListHtml}
+        </div>
+
+        <div class="card teal-accent">
+          <div class="card-title" style="margin-bottom: 12px;">Moderasi Respons (Pending / Tervalidasi / Ditolak)</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Responden</th>
+                  <th>Jawaban</th>
+                  <th>Indikator Waktu</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>${moderationRows}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function viewMetrikTesting() {
+      const totalResp = state.responses.length;
+      const validResp = state.responses.filter(r => r.status === "Tervalidasi").length;
+      const pendingResp = state.responses.filter(r => r.status === "Pending").length;
+      const rejectedResp = state.responses.filter(r => r.status === "Ditolak").length;
+
+      const logRows = state.telemetry.map(t => `
+        <tr>
+          <td>${escapeHtml(t.step)}</td>
+          <td>${escapeHtml(t.user)}</td>
+          <td><span class="badge b-info">${escapeHtml(t.outcome)}</span></td>
+          <td class="muted">${escapeHtml(t.note)}</td>
+        </tr>
+      `).join("");
+
+      return `
+        <div class="grid-3">
+          <div class="stat-box">
+            <div class="muted">Total Respons Masuk</div>
+            <div class="num">${totalResp}</div>
+          </div>
+          <div class="stat-box teal">
+            <div class="muted">Tervalidasi / Pending</div>
+            <div class="num">${validResp} / ${pendingResp}</div>
+          </div>
+          <div class="stat-box amber">
+            <div class="muted">Ditolak / Anomali</div>
+            <div class="num">${rejectedResp}</div>
+          </div>
+        </div>
+
+        <div class="card purple-accent">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Log Aktivitas & Metrik Uji Coba (Testing Telemetry)</div>
+              <p class="muted">Merekam alur penggunaan saat demo atau usability testing dengan mahasiswa</p>
+            </div>
+            <button class="btn btn-sm" id="resetDemoBtn">Reset Data Uji Coba</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tahap</th>
+                  <th>Pengguna</th>
+                  <th>Hasil</th>
+                  <th>Catatan</th>
+                </tr>
+              </thead>
+              <tbody>${logRows}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function openPreScreening(surveyId) {
+      const s = state.surveys.find(item => item.id === surveyId);
+      if (!s) return;
+
+      logTelemetry("Buka Pre-Screening", "Dimulai", s.title);
+
+      const modal = document.getElementById("surveyModal");
+      const box = document.getElementById("modalContent");
+
+      box.innerHTML = `
+        <div class="card-header">
+          <div>
+            <div class="card-title">Gerbang Pre-Screening Kriteria</div>
+            <div class="muted">${escapeHtml(s.title)}</div>
+          </div>
+          <button class="btn btn-sm" id="closeModalBtn">Tutup</button>
+        </div>
+
+        <div class="alert alert-info">
+          Jawab pertanyaan saringan singkat berikut sebelum mengakses kuesioner utama agar kuota responden tetap tepat sasaran.
+        </div>
+
+        <form id="screeningForm">
+          <div class="form-group">
+            <label>${escapeHtml(s.screeningQuestion)}</label>
+            <div style="display: flex; gap: 16px; margin-top: 6px;">
+              <label style="font-weight: 400; display: flex; align-items: center; gap: 6px; margin: 0;">
+                <input type="radio" name="screenAns" value="ya" required style="width: auto;" /> Ya
+              </label>
+              <label style="font-weight: 400; display: flex; align-items: center; gap: 6px; margin: 0;">
+                <input type="radio" name="screenAns" value="tidak" required style="width: auto;" /> Tidak
+              </label>
+            </div>
+          </div>
+
+          <div class="row-actions">
+            <button type="submit" class="btn btn-primary">Cek Kelayakan</button>
+          </div>
+        </form>
+      `;
+
+      modal.classList.add("open");
+
+      document.getElementById("closeModalBtn").onclick = () => modal.classList.remove("open");
+
+      document.getElementById("screeningForm").onsubmit = (e) => {
+        e.preventDefault();
+        const ans = new FormData(e.target).get("screenAns");
+        if (ans !== s.screeningExpected) {
+          logTelemetry("Pre-Screening", "Tidak Lolos", `Jawaban '${ans}' tidak sesuai kriteria`);
+          box.innerHTML = `
+            <div class="card-title" style="margin-bottom: 8px;">Belum Memenuhi Kriteria Survei Ini</div>
+            <div class="alert alert-warn">
+              Terima kasih atas kesediaan Anda. Survei ini membutuhkan kriteria khusus sehingga belum cocok untuk profil saat ini, dan kuota responden tetap terjaga.
+            </div>
+            <button class="btn btn-primary" id="doneScreenFailBtn">Kembali ke Katalog</button>
+          `;
+          document.getElementById("doneScreenFailBtn").onclick = () => modal.classList.remove("open");
+          return;
+        }
+
+        logTelemetry("Pre-Screening", "Lolos", "Masuk ke pengisian survei");
+        openMainSurveyForm(s);
+      };
+    }
+
+    function openMainSurveyForm(s) {
+      const box = document.getElementById("modalContent");
+      const startTime = Date.now();
+
+      box.innerHTML = `
+        <div class="card-header">
+          <div>
+            <div class="card-title">Pengisian Survei & Verifikasi</div>
+            <div class="muted">Imbalan: <span class="reward-tag">+${s.rewardPoints} poin</span> setelah tervalidasi</div>
+          </div>
+          <button class="btn btn-sm" id="closeModalBtn2">Batal</button>
+        </div>
+
+        ${
+          s.externalUrl
+            ? `<div class="alert alert-info">
+                Langkah 1: Isi form utama di <a href="${escapeHtml(s.externalUrl)}" target="_blank" rel="noopener noreferrer"><strong>tautan kuesioner eksternal</strong></a>, lalu salin kode akhir ke kolom di bawah.<br>
+                <span class="muted">(Petunjuk uji coba: gunakan kode <strong>${escapeHtml(s.verificationCode)}</strong>)</span>
+               </div>`
+            : ""
+        }
+
+        <form id="mainSurveyForm">
+          <div class="form-group">
+            <label>${escapeHtml(s.mainQuestion)}</label>
+            <textarea name="answer" rows="3" required placeholder="Tulis jawaban singkat dan jelas..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>${escapeHtml(s.attentionCheck)}</label>
+            <select name="attentionAns" style="width: 100%; padding: 9px 11px; font-size: 13px;" required>
+              <option value="">-- Pilih --</option>
+              <option value="ya">Ya, saya membaca</option>
+              <option value="setuju">Setuju</option>
+              <option value="lewati">Tidak setuju / Lewati</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Kode Verifikasi Akhir Form</label>
+            <input type="text" name="verifCode" required placeholder="Masukkan kode verifikasi dari halaman akhir form" />
+          </div>
+
+          <div class="row-actions">
+            <button type="submit" class="btn btn-primary">Kirim Respons</button>
+          </div>
+        </form>
+      `;
+
+      document.getElementById("closeModalBtn2").onclick = () =>
+        document.getElementById("surveyModal").classList.remove("open");
+
+      document.getElementById("mainSurveyForm").onsubmit = (e) => {
+        e.preventDefault();
+        const u = getCurrentUser();
+        const fd = new FormData(e.target);
+        const answer = (fd.get("answer") || "").toString().trim();
+        const attentionAns = fd.get("attentionAns");
+        const verifCode = (fd.get("verifCode") || "").toString().trim().toUpperCase();
+        const durationSec = Math.max(1, Math.round((Date.now() - startTime) / 1000));
+
+        const codeMatched = verifCode === (s.verificationCode || "").toUpperCase();
+        const attentionPassed = attentionAns === s.attentionExpected;
+
+        let status = "Pending";
+        let pointsAwarded = s.rewardPoints;
+
+        if (!codeMatched || !attentionPassed || durationSec < 4) {
+          status = "Ditolak";
+          pointsAwarded = 0;
+        } else if (durationSec >= 6) {
+          status = "Tervalidasi";
+          u.points += s.rewardPoints;
+        }
+
+        u.filledCount += 1;
+
+        state.responses.unshift({
+          id: "r_" + Date.now(),
+          surveyId: s.id,
+          respondentId: u.id,
+          respondentName: u.name,
+          answer,
+          durationSec,
+          codeMatched,
+          attentionPassed,
+          status,
+          pointsAwarded,
+          createdAt: "Baru saja"
+        });
+
+        logTelemetry(
+          "Submit Respons",
+          status,
+          `Durasi ${durationSec}d • Kode ${codeMatched ? "valid" : "salah"}`
+        );
+
+        saveState();
+        document.getElementById("surveyModal").classList.remove("open");
+        renderView();
+        showToast(
+          status === "Tervalidasi"
+            ? `Respons tervalidasi! +${s.rewardPoints} poin ditambahkan.`
+            : `Respons tercatat dengan status: ${status}.`
+        );
+      };
+    }
+
+    function exportResponsesCsv() {
+      const header = ["id_respons", "judul_survei", "responden", "durasi_detik", "kode_cocok", "status", "poin", "jawaban"];
+      const lines = [header.join(",")];
+
+      state.responses.forEach(r => {
+        const s = state.surveys.find(item => item.id === r.surveyId);
+        const row = [
+          r.id,
+          `"${(s ? s.title : "").replace(/"/g, '""')}"`,
+          `"${r.respondentName.replace(/"/g, '""')}"`,
+          r.durationSec,
+          r.codeMatched,
+          r.status,
+          r.pointsAwarded,
+          `"${r.answer.replace(/"/g, '""')}"`
+        ];
+        lines.push(row.join(","));
+      });
+
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "respondenku_dataset.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("Dataset CSV berhasil diunduh.");
+    }
+
+    function bindEvents() {
+      document.querySelectorAll("[data-start-survey]").forEach(btn => {
+        btn.onclick = () => openPreScreening(btn.dataset.startSurvey);
+      });
+
+      const createForm = document.getElementById("createSurveyForm");
+      if (createForm) {
+        createForm.onsubmit = (e) => {
+          e.preventDefault();
+          const u = getCurrentUser();
+          const fd = new FormData(e.target);
+
+          const newSurvey = {
+            id: "s_" + Date.now(),
+            ownerId: u.id,
+            title: fd.get("title").toString().trim(),
+            researcher: `${u.name} • Mahasiswa`,
+            minAge: Number(fd.get("minAge")),
+            maxAge: Number(fd.get("maxAge")),
+            city: fd.get("city").toString(),
+            habitKeyword: fd.get("habitKeyword").toString().trim(),
+            quota: Number(fd.get("quota")),
+            rewardPoints: Number(fd.get("rewardPoints")),
+            externalUrl: fd.get("externalUrl").toString().trim(),
+            verificationCode: fd.get("verificationCode").toString().trim().toUpperCase(),
+            screeningQuestion: fd.get("screeningQuestion").toString().trim(),
+            screeningExpected: fd.get("screeningExpected").toString(),
+            mainQuestion: fd.get("mainQuestion").toString().trim(),
+            attentionCheck: "Pilih opsi 'Ya, saya membaca' untuk validasi instrumen.",
+            attentionExpected: "ya"
+          };
+
+          state.surveys.unshift(newSurvey);
+          logTelemetry("Buat Survei", "Dipublikasikan", newSurvey.title);
+          saveState();
+          state.activeTab = "cari";
+          renderView();
+          showToast("Survei baru berhasil dipublikasikan.");
+        };
+      }
+
+      document.querySelectorAll("[data-moderate]").forEach(btn => {
+        btn.onclick = () => {
+          const respId = btn.dataset.moderate;
+          const nextStatus = btn.dataset.action;
+          const target = state.responses.find(r => r.id === respId);
+          if (!target) return;
+
+          const prevStatus = target.status;
+          const respondentUser = state.users.find(u => u.id === target.respondentId);
+
+          if (prevStatus !== "Tervalidasi" && nextStatus === "Tervalidasi" && respondentUser) {
+            respondentUser.points += target.pointsAwarded;
+          } else if (prevStatus === "Tervalidasi" && nextStatus === "Ditolak" && respondentUser) {
+            respondentUser.points = Math.max(0, respondentUser.points - target.pointsAwarded);
+          }
+
+          target.status = nextStatus;
+          logTelemetry("Moderasi Peneliti", nextStatus, `Respons ${target.respondentName}`);
+          saveState();
+          renderView();
+          showToast(`Status respons diubah menjadi ${nextStatus}.`);
+        };
+      });
+
+      const csvBtn = document.getElementById("exportCsvBtn");
+      if (csvBtn) csvBtn.onclick = exportResponsesCsv;
+
+      const resetBtn = document.getElementById("resetDemoBtn");
+      if (resetBtn) {
+        resetBtn.onclick = () => {
+          state = structuredClone(DEFAULT_STATE);
+          saveState();
+          renderView();
+          showToast("Data uji coba direset ke kondisi awal.");
+        };
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    document.getElementById("userSwitcher").onchange = (e) => {
+      state.currentUserId = e.target.value;
+      logTelemetry("Ganti Akun", "Berhasil", `Aktif sebagai ${getCurrentUser().name}`);
+      saveState();
+      renderView();
+    };
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.onclick = () => {
+        state.activeTab = btn.dataset.tab;
+        renderView();
+      };
+    });
+
+    document.getElementById("surveyModal").onclick = (e) => {
+      if (e.target.id === "surveyModal") {
+        e.target.classList.remove("open");
+      }
+    };
+
+    renderView();
+  </script>
+</body>
+</html>
