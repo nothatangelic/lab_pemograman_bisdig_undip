@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KosJujur: ulasan kos dari penghuni terverifikasi</title>
+<meta name="description" content="Cari kos di sekitar kampus dengan ulasan nyata dari penghuni terverifikasi dan daftar peringatan nomor atau rekening penipu.">
+<meta name="theme-color" content="#0B6E78">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B6E78'/%3E%3Cpath d='M6 16l10-8 10 8v9H6z' fill='%23F0B02E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Statistik pengunjung: aktifkan Netlify Analytics di dashboard (tanpa kode tambahan), atau tempel skrip Plausible/GA di sini. -->
+<style>
+:root{--bg:#F4F7F7;--ink:#10242F;--mut:#53666F;--pri:#0B6E78;--pri2:#084F57;--acc:#F0B02E;--bad:#B8402C;--ok:#1F8A4C;--line:#D5E0E2;--card:#fff;--r:14px;
+--h:'Bricolage Grotesque',system-ui,sans-serif;--b:'Figtree',system-ui,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--b)}
+h1,h2,h3{font-family:var(--h);line-height:1.1;margin:0}
+a{color:var(--pri)}button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.wrap{max-width:1120px;margin:auto;padding:0 20px}
+header{position:sticky;top:0;z-index:5;background:rgba(244,247,247,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:20px;height:64px}
+.logo{font:800 1.35rem var(--h);color:var(--pri2);text-decoration:none;display:flex;gap:8px;align-items:center}
+.logo i{width:26px;height:26px;border-radius:7px;background:var(--pri);display:grid;place-items:center}
+.logo i:after{content:"";width:12px;height:9px;background:var(--acc);clip-path:polygon(50% 0,100% 45%,100% 100%,0 100%,0 45%)}
+nav{display:flex;gap:4px;margin-left:auto}nav a{padding:8px 12px;border-radius:99px;text-decoration:none;color:var(--mut);font-weight:500}
+nav a.on{background:var(--pri);color:#fff}
+.btn{border:0;border-radius:99px;padding:10px 18px;font-weight:600;cursor:pointer;background:var(--pri);color:#fff}
+.btn:hover{background:var(--pri2)}.btn.ghost{background:transparent;color:var(--pri);border:1.5px solid var(--pri)}
+.btn.sm{padding:6px 12px;font-size:.88rem}.btn.bad{background:var(--bad)}
+.hero{padding:56px 0 40px}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(2.2rem,5vw,3.7rem);font-weight:800;letter-spacing:-.02em}
+.hero p{color:var(--mut);font-size:1.1rem;max-width:46ch;margin:16px 0 24px}
+.search{display:flex;gap:8px;background:#fff;border:1.5px solid var(--line);border-radius:99px;padding:6px;max-width:500px}
+.search input{flex:1;border:0;background:none;padding:8px 14px;min-width:0}.search input:focus{outline:0}
+.sample{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 18px 40px -22px rgba(11,110,120,.45);transform:rotate(1.5deg)}
+.sample h3{font-size:1.2rem}.sample small{color:var(--mut)}
+.badge{display:inline-flex;gap:6px;align-items:center;background:#E3F3E9;color:var(--ok);font-weight:600;font-size:.8rem;border-radius:99px;padding:3px 10px}
+.asp{display:grid;grid-template-columns:120px 1fr 32px;gap:10px;align-items:center;font-size:.9rem;margin:8px 0}
+.bar{height:8px;border-radius:9px;background:#E4ECED;overflow:hidden}.bar b{display:block;height:100%;background:var(--pri);border-radius:9px}
+.asp.lo .bar b{background:var(--acc)}
+.stats{display:flex;gap:28px;margin-top:28px;flex-wrap:wrap}.stats div{font-size:.9rem;color:var(--mut)}.stats strong{display:block;font:800 1.6rem var(--h);color:var(--ink)}
+section.v{display:none;padding-bottom:64px}section.v.on{display:block}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 20px}
+.tools select{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:5px 12px;cursor:pointer;font-size:.88rem}
+.chip[aria-pressed=true]{background:var(--pri);color:#fff;border-color:var(--pri)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px}
+.kos{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:10px}
+.kos header{all:unset;display:flex;justify-content:space-between;gap:10px}
+.kos h3{font-size:1.15rem}.kos .sc{font:800 1.5rem var(--h);color:var(--pri);text-align:right;line-height:1}
+.kos .sc small{display:block;font:500 .75rem var(--b);color:var(--mut)}
+.price{font-weight:600}.tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:#EAF1F2;border-radius:6px;padding:2px 8px;font-size:.8rem}
+.empty{padding:40px;text-align:center;color:var(--mut);background:#fff;border:1.5px dashed var(--line);border-radius:var(--r)}
+h2.t{font-size:2rem;margin:40px 0 8px}.lead{color:var(--mut);max-width:60ch;margin:0 0 20px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:18px}
+.row{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}.row:first-child{border:0}
+.warn{border-left:4px solid var(--bad)}
+input.f,textarea.f,select.f{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;margin:4px 0 12px}
+label{font-weight:600;font-size:.92rem}
+dialog{border:0;border-radius:20px;padding:0;width:min(680px,94vw);max-height:92vh;box-shadow:0 30px 80px rgba(16,36,47,.35)}
+dialog::backdrop{background:rgba(16,36,47,.5)}
+.dl{padding:24px;overflow:auto;max-height:92vh}.x{float:right;background:none;border:0;font-size:1.6rem;cursor:pointer;color:var(--mut)}
+.rev{padding:14px 0;border-top:1px solid var(--line)}.rev p{margin:6px 0 0}.meta{font-size:.85rem;color:var(--mut)}
+.rg{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center}
+.rg input[type=range]{accent-color:var(--pri);width:160px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;opacity:0;transition:.25s;z-index:20;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%)}
+footer{border-top:1px solid var(--line);padding:24px 0;color:var(--mut);font-size:.88rem}
+@media(max-width:820px){.hero .wrap{grid-template-columns:1fr}.sample{transform:none}nav a{padding:8px}.logo span{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<a class="logo" href="#beranda"><i></i><span>KosJujur</span></a>
+<nav aria-label="Menu utama"><a href="#beranda" data-n="beranda">Cari kos</a><a href="#peringatan" data-n="peringatan">Cek penipuan</a><a href="#admin" data-n="admin">Admin</a></nav>
+<button class="btn sm" id="authBtn">Masuk</button>
+</div></header>
+
+<main>
+<section class="v" id="v-beranda">
+<div class="hero"><div class="wrap">
+<div>
+<h1>Baca ulasan penghuninya dulu, baru bayar kosnya.</h1>
+<p>Setiap ulasan di KosJujur ditulis mahasiswa dengan surel kampus. Tidak ada ulasan titipan pemilik, dan kos yang dicurigai bisa dilaporkan.</p>
+<form class="search" id="heroSearch" role="search"><input id="q" type="search" placeholder="Cari nama kos atau daerah, misalnya Tembalang" aria-label="Cari kos"><button class="btn">Cari</button></form>
+<div class="stats" id="stats"></div>
+</div>
+<div class="sample" aria-hidden="true">
+<span class="badge">✓ Penghuni terverifikasi</span>
+<h3 style="margin:10px 0 2px">Contoh ulasan kos</h3><small>Tinggal 14 bulan, angkatan 2023</small>
+<div style="margin-top:12px">
+<div class="asp"><span>Kebersihan</span><div class="bar"><b style="width:88%"></b></div><b>4,4</b></div>
+<div class="asp"><span>Keamanan</span><div class="bar"><b style="width:80%"></b></div><b>4,0</b></div>
+<div class="asp"><span>Air dan internet</span><div class="bar"><b style="width:56%"></b></div><b>2,8</b></div>
+<div class="asp lo"><span>Kejujuran harga</span><div class="bar"><b style="width:36%"></b></div><b>1,8</b></div>
+</div>
+<p class="meta" style="margin:8px 0 0">“Air sering mati sore hari, dan harga naik Rp150 ribu tanpa pemberitahuan.”</p>
+</div>
+</div></div>
+
+<div class="wrap" id="daftar">
+<h2 class="t" style="margin-top:8px">Daftar kos</h2>
+<div class="tools">
+<select id="fh" aria-label="Harga maksimal"><option value="0">Semua harga</option><option value="600000">≤ Rp600 ribu</option><option value="900000">≤ Rp900 ribu</option><option value="1300000">≤ Rp1,3 juta</option></select>
+<select id="fj" aria-label="Jarak maksimal"><option value="0">Semua jarak</option><option value="0.5">≤ 500 m dari kampus</option><option value="1">≤ 1 km</option><option value="2">≤ 2 km</option></select>
+<select id="fs" aria-label="Urutkan"><option value="r">Rating tertinggi</option><option value="h">Harga termurah</option><option value="j">Terdekat</option></select>
+<span id="fc" style="display:flex;gap:6px;flex-wrap:wrap"></span>
+</div>
+<div class="grid" id="list"></div>
+</div>
+</section>
+
+<section class="v" id="v-peringatan"><div class="wrap">
+<h2 class="t">Cek nomor atau rekening</h2>
+<p class="lead">Ketik nomor telepon atau rekening pemilik kos yang akan Anda hubungi. Kami mencocokkannya dengan laporan yang sudah diperiksa admin.</p>
+<div class="panel"><form id="cekForm" style="display:flex;gap:8px;flex-wrap:wrap"><input class="f" id="cekQ" style="flex:1;min-width:220px;margin:0" placeholder="Contoh: 0812xxxx atau nomor rekening" aria-label="Nomor atau rekening"><button class="btn">Cek sekarang</button></form><p id="cekR" class="meta" role="status" style="margin:12px 0 0"></p></div>
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><h3>Daftar peringatan</h3><button class="btn ghost sm" id="rptBtn">Laporkan kos atau nomor</button></div>
+<div class="panel warn" id="warnList" style="margin-top:12px"></div>
+<p class="meta">Tips: jangan transfer uang muka sebelum melihat kos langsung atau lewat video call dengan pemilik yang terbukti.</p>
+</div></section>
+
+<section class="v" id="v-admin"><div class="wrap">
+<h2 class="t">Panel admin</h2>
+<div id="adminBody"></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">KosJujur: proyek tugas akhir Laboratorium Pemrograman. Data kos dan ulasan pada versi ini adalah contoh dan tersimpan di peramban Anda.</div></footer>
+
+<dialog id="dKos"><div class="dl" id="kosBody"></div></dialog>
+<dialog id="dLogin"><div class="dl"><button class="x" data-close aria-label="Tutup">×</button>
+<h2>Masuk dengan surel kampus</h2><p class="lead">Hanya surel berakhiran .ac.id yang dapat menulis ulasan.</p>
+<form id="loginForm"><label for="lm">Surel kampus</label><input class="f" id="lm" type="email" required placeholder="nama@students.undip.ac.id">
+<label for="ln">NIM atau angkatan</label><input class="f" id="ln" required placeholder="Contoh: 2023">
+<button class="btn">Masuk</button></form></div></dialog>
+<dialog id="dRpt"><div class="dl"><button class="x" data-close aria-label="Tutup">×</button>
+<h2>Buat laporan</h2><form id="rptForm" style="margin-top:12px">
+<label for="rj">Jenis laporan</label><select class="f" id="rj"><option>Nomor atau rekening penipu</option><option>Kos fiktif</option><option>Ulasan bermasalah</option></select>
+<label for="ro">Yang dilaporkan</label><input class="f" id="ro" required placeholder="Nomor, rekening, atau nama kos">
+<label for="rd">Kejadian</label><textarea class="f" id="rd" rows="3" required placeholder="Ceritakan secara singkat dan berdasarkan fakta"></textarea>
+<button class="btn">Kirim laporan</button></form></div></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const A=[['kebersihan','Kebersihan'],['keamanan','Keamanan'],['air','Air dan internet'],['harga','Kejujuran harga'],['respons','Responsivitas pemilik']];
+const FAS=['AC','Kamar mandi dalam','Wi-Fi','Parkir motor','Laundry'];
+const $=s=>document.querySelector(s),rp=n=>'Rp'+n.toLocaleString('id-ID');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const seed=()=>({me:null,
+kos:[
+{id:1,n:'Kos Melati Putri',a:'Tembalang',h:850000,j:.4,f:['AC','Kamar mandi dalam','Wi-Fi'],kt:'0812-0000-0001'},
+{id:2,n:'Griya Sekaran Asri',a:'Sekaran',h:650000,j:1.2,f:['Wi-Fi','Parkir motor'],kt:'0813-0000-0002'},
+{id:3,n:'Kos Pelangi Tembalang',a:'Tembalang',h:1200000,j:.3,f:['AC','Kamar mandi dalam','Wi-Fi','Laundry'],kt:'0857-0000-0003'},
+{id:4,n:'Wisma Bukit Ngesrep',a:'Ngesrep',h:550000,j:1.8,f:['Parkir motor'],kt:'0821-0000-0004'},
+{id:5,n:'Kos Cemara Pudakpayung',a:'Pudakpayung',h:900000,j:2,f:['AC','Wi-Fi','Parkir motor'],kt:'0856-0000-0005'}],
+rev:[
+{id:1,k:1,u:'seed',nm:'Angkatan 2022',s:[5,4,4,5,5],l:'18 bulan',t:'Pemilik cepat menanggapi keluhan. Air lancar, harga tidak pernah naik mendadak selama saya tinggal.',st:'ok'},
+{id:2,k:1,u:'seed',nm:'Angkatan 2023',s:[4,4,4,4,5],l:'10 bulan',t:'Wi-Fi cukup untuk kuliah daring. Kamar mandi bersih, hanya parkir motor agak sempit.',st:'ok'},
+{id:3,k:2,u:'seed',nm:'Angkatan 2023',s:[3,4,2,2,3],l:'14 bulan',t:'Air sering mati sore hari. Harga naik Rp100 ribu saat tahun ajaran baru tanpa pemberitahuan.',st:'ok'},
+{id:4,k:3,u:'seed',nm:'Angkatan 2024',s:[5,5,4,3,4],l:'6 bulan',t:'Fasilitas lengkap dan dekat kampus. Harga di atas rata-rata tetapi sesuai dengan yang ditawarkan.',st:'ok'},
+{id:5,k:4,u:'seed',nm:'Angkatan 2021',s:[3,3,3,5,4],l:'24 bulan',t:'Murah dan pemilik jujur soal biaya listrik. Jaraknya lumayan jauh dari kampus.',st:'ok'}],
+rpt:[
+{id:1,j:'Nomor atau rekening penipu',o:'0899-1111-2222',d:'Meminta uang muka untuk kos yang tidak ada di alamatnya.',st:'verif'},
+{id:2,j:'Nomor atau rekening penipu',o:'Rek. 1234567890 a.n. Budi S.',d:'Pemilik palsu, rekening berbeda dari nama pemilik asli.',st:'verif'}]});
+let S;try{S=JSON.parse(localStorage.getItem('kj1'))}catch(e){}S=S||seed();
+const save=()=>{try{localStorage.setItem('kj1',JSON.stringify(S))}catch(e){}};
+let adm=false,fas=new Set();
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2600)}
+const rv=id=>S.rev.filter(r=>r.k===id&&r.st==='ok');
+function avg(id){const r=rv(id);if(!r.length)return{n:0,t:0,s:A.map(()=>0)};
+const s=A.map((_,i)=>r.reduce((a,x)=>a+x.s[i],0)/r.length);return{n:r.length,t:s.reduce((a,b)=>a+b,0)/5,s}}
+const f1=n=>n.toFixed(1).replace('.',',');
+const bars=s=>s.map((v,i)=>`<div class="asp ${v&&v<2.6?'lo':''}"><span>${A[i][1]}</span><div class="bar"><b style="width:${v*20}%"></b></div><b>${v?f1(v):'-'}</b></div>`).join('');
+
+function route(){const h=(location.hash.slice(1)||'beranda');const v=['beranda','peringatan','admin'].includes(h)?h:'beranda';
+document.querySelectorAll('.v').forEach(e=>e.classList.toggle('on',e.id==='v-'+v));
+document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.n===v));
+if(v==='admin')renderAdmin();if(v==='peringatan')renderWarn();scrollTo(0,0)}
+
+function renderStats(){const u=S.rev.filter(r=>r.st==='ok').length;
+$('#stats').innerHTML=`<div><strong>${S.kos.length}</strong>kos terdaftar</div><div><strong>${u}</strong>ulasan terverifikasi</div><div><strong>${S.rpt.filter(r=>r.st==='verif').length}</strong>peringatan aktif</div>`}
+function renderFilters(){$('#fc').innerHTML=FAS.map(f=>`<button class="chip" aria-pressed="${fas.has(f)}" data-f="${f}">${f}</button>`).join('')}
+function renderList(){const q=$('#q').value.trim().toLowerCase(),mh=+$('#fh').value,mj=+$('#fj').value,so=$('#fs').value;
+let l=S.kos.filter(k=>(!q||(k.n+' '+k.a).toLowerCase().includes(q))&&(!mh||k.h<=mh)&&(!mj||k.j<=mj)&&[...fas].every(f=>k.f.includes(f)));
+l.sort((a,b)=>so==='h'?a.h-b.h:so==='j'?a.j-b.j:avg(b.id).t-avg(a.id).t);
+$('#list').innerHTML=l.length?l.map(k=>{const a=avg(k.id);return`<article class="kos"><header><div><h3>${esc(k.n)}</h3><span class="meta">${esc(k.a)}, ${k.j<1?k.j*1000+' m':k.j+' km'} dari kampus</span></div>
+<div class="sc">${a.n?f1(a.t):'-'}<small>${a.n} ulasan</small></div></header>
+<div class="price">${rp(k.h)} <span class="meta">/ bulan</span></div><div class="tags">${k.f.map(f=>`<span>${f}</span>`).join('')}</div>
+<button class="btn ghost sm" data-k="${k.id}" style="align-self:flex-start;margin-top:auto">Lihat ulasan</button></article>`}).join(''):
+`<div class="empty" style="grid-column:1/-1">Tidak ada kos yang cocok. Coba longgarkan harga, jarak, atau fasilitas.</div>`}
+
+function openKos(id){const k=S.kos.find(x=>x.id===id),a=avg(id),rs=rv(id);
+const mine=S.me&&S.rev.some(r=>r.k===id&&r.u===S.me.email);
+const form=!S.me?`<p class="meta">Masuk dengan surel kampus untuk menulis ulasan.</p><button class="btn sm" data-login>Masuk</button>`:
+mine?`<p class="meta">Anda sudah menulis ulasan untuk kos ini. Satu pengguna hanya dapat menulis satu ulasan per kos.</p>`:
+`<form id="revForm" data-k="${id}"><h3 style="margin-bottom:10px">Tulis ulasan</h3><div class="rg">${A.map((x,i)=>`<label for="s${i}">${x[1]}</label><input type="range" id="s${i}" min="1" max="5" value="3">`).join('')}</div>
+<label for="rl" style="display:block;margin-top:12px">Lama tinggal</label><input class="f" id="rl" required placeholder="Contoh: 12 bulan">
+<label for="rt">Pengalaman Anda (tulis fakta, minimal 30 karakter)</label><textarea class="f" id="rt" rows="3" minlength="30" required></textarea><button class="btn">Kirim ulasan</button></form>`;
+$('#kosBody').innerHTML=`<button class="x" data-close aria-label="Tutup">×</button><h2>${esc(k.n)}</h2>
+<p class="meta">${esc(k.a)} · ${rp(k.h)} / bulan · <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent(k.n+' '+k.a+' Semarang')}">Lihat di peta</a></p>
+<div style="margin:14px 0">${a.n?bars(a.s):'<div class="empty">Belum ada ulasan. Jadilah yang pertama.</div>'}</div>
+${rs.map(r=>`<div class="rev"><span class="badge">✓ ${esc(r.nm)}</span> <span class="meta">tinggal ${esc(r.l)}</span><p>${esc(r.t)}</p></div>`).join('')}
+<div class="rev">${form}</div>`;
+$('#dKos').showModal()}
+
+function renderWarn(){const w=S.rpt.filter(r=>r.st==='verif');
+$('#warnList').innerHTML=w.length?w.map(r=>`<div class="row"><div><strong>${esc(r.o)}</strong><div class="meta">${esc(r.d)}</div></div><span class="badge" style="background:#F8E4DF;color:var(--bad)">Dilaporkan</span></div>`).join(''):'<p class="meta">Belum ada peringatan.</p>'}
+
+function renderAdmin(){const B=$('#adminBody');
+if(!adm){B.innerHTML=`<div class="panel"><p class="lead">Area ini untuk moderator. Kata sandi demo: <b>admin123</b>. Pada versi produksi, autentikasi dilakukan di server.</p><form id="admForm" style="display:flex;gap:8px"><input class="f" type="password" id="ap" placeholder="Kata sandi" aria-label="Kata sandi admin" style="margin:0;max-width:260px"><button class="btn">Masuk</button></form></div>`;return}
+const nw=S.rpt.filter(r=>r.st==='baru');
+B.innerHTML=`<div class="panel"><h3>Laporan masuk (${nw.length})</h3>${nw.length?nw.map(r=>`<div class="row"><div><strong>${esc(r.j)}: ${esc(r.o)}</strong><div class="meta">${esc(r.d)}</div></div><div style="display:flex;gap:6px"><button class="btn sm" data-rv="${r.id}">Verifikasi</button><button class="btn ghost sm" data-rt="${r.id}">Tolak</button></div></div>`).join(''):'<p class="meta">Tidak ada laporan baru.</p>'}</div>
+<div class="panel"><h3>Ulasan</h3>${S.rev.map(r=>`<div class="row"><div><strong>${esc(S.kos.find(k=>k.id===r.k).n)}</strong> <span class="meta">${esc(r.nm)} · ${r.st==='ok'?'tampil':'disembunyikan'}</span><div class="meta">${esc(r.t)}</div></div><button class="btn ${r.st==='ok'?'bad':'ghost'} sm" data-hd="${r.id}">${r.st==='ok'?'Sembunyikan':'Tampilkan'}</button></div>`).join('')}</div>
+<button class="btn ghost sm" id="reset">Reset data contoh</button>`}
+
+function auth(){$('#authBtn').textContent=S.me?'Keluar ('+S.me.nm+')':'Masuk'}
+document.addEventListener('click',e=>{const t=e.target.closest('button,a');if(!t)return;
+if(t.dataset.close!==undefined)t.closest('dialog').close();
+if(t.dataset.k&&t.classList.contains('btn'))openKos(+t.dataset.k);
+if(t.dataset.f){fas.has(t.dataset.f)?fas.delete(t.dataset.f):fas.add(t.dataset.f);renderFilters();renderList()}
+if(t.dataset.login!==undefined){$('#dKos').close();$('#dLogin').showModal()}
+if(t.dataset.rv){S.rpt.find(r=>r.id==t.dataset.rv).st='verif';save();renderAdmin();toast('Laporan diverifikasi dan masuk daftar peringatan')}
+if(t.dataset.rt){S.rpt.find(r=>r.id==t.dataset.rt).st='tolak';save();renderAdmin();toast('Laporan ditolak')}
+if(t.dataset.hd){const r=S.rev.find(r=>r.id==t.dataset.hd);r.st=r.st==='ok'?'sembunyi':'ok';save();renderAdmin();renderList();renderStats()}
+if(t.id==='reset'){localStorage.removeItem('kj1');S=seed();adm=false;auth();renderAdmin();renderList();renderStats();toast('Data contoh dikembalikan')}
+if(t.id==='rptBtn')$('#dRpt').showModal();
+if(t.id==='authBtn'){if(S.me){S.me=null;save();auth();toast('Anda sudah keluar')}else $('#dLogin').showModal()}});
+document.addEventListener('submit',e=>{e.preventDefault();const id=e.target.id;
+if(id==='heroSearch'){renderList();$('#daftar').scrollIntoView()}
+if(id==='loginForm'){const m=$('#lm').value.trim().toLowerCase();
+if(!/^[^@\s]+@([a-z0-9-]+\.)*ac\.id$/.test(m))return toast('Gunakan surel kampus berakhiran .ac.id');
+S.me={email:m,nm:m.split('@')[0],ang:$('#ln').value};save();auth();$('#dLogin').close();toast('Berhasil masuk. Akun Anda terverifikasi')}
+if(id==='revForm'){const k=+e.target.dataset.k;if(S.rev.some(r=>r.k===k&&r.u===S.me.email))return;
+S.rev.push({id:Date.now(),k,u:S.me.email,nm:'Angkatan '+S.me.ang,s:A.map((_,i)=>+$('#s'+i).value),l:$('#rl').value,t:$('#rt').value,st:'ok'});
+save();renderList();renderStats();openKos(k);toast('Ulasan terkirim')}
+if(id==='rptForm'){S.rpt.push({id:Date.now(),j:$('#rj').value,o:$('#ro').value,d:$('#rd').value,st:'baru'});save();e.target.reset();$('#dRpt').close();toast('Laporan terkirim ke admin')}
+if(id==='cekForm'){const q=$('#cekQ').value.trim().toLowerCase().replace(/[\s-]/g,'');if(!q)return;
+const hit=S.rpt.find(r=>r.st==='verif'&&r.o.toLowerCase().replace(/[\s-]/g,'').includes(q));
+$('#cekR').innerHTML=hit?`<b style="color:var(--bad)">Pernah dilaporkan:</b> ${esc(hit.d)}`:'Belum ada laporan terverifikasi. Ini bukan jaminan aman, tetap lakukan survei langsung.'}
+if(id==='admForm'){if($('#ap').value==='admin123'){adm=true;renderAdmin()}else toast('Kata sandi salah')}});
+['q','fh','fj','fs'].forEach(i=>$('#'+i).addEventListener('input',renderList));
+addEventListener('hashchange',route);
+renderFilters();renderList();renderStats();auth();route();
+</script>
+</body>
+</html>
