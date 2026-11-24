@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BeasiswaMatch — Platform Informasi &amp; Pencocokan Beasiswa</title>
+<meta name="description" content="BeasiswaMatch membantu mahasiswa menemukan dan mencocokkan program beasiswa sesuai jenjang, jurusan, IPK, dan domisili — lengkap dengan pengingat tenggat dan daftar periksa berkas.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+
+<!--
+  STATISTIK PENGUNJUNG (opsional):
+  Cara termudah adalah mengaktifkan "Netlify Analytics" di dashboard situs Anda
+  (Site settings > Analytics) — tidak perlu kode tambahan sama sekali.
+
+  Alternatif gratis: daftar akun di https://www.goatcounter.com/ atau
+  https://plausible.io/ , lalu tempel potongan <script> yang mereka berikan
+  tepat di atas tag </head> ini. Lihat README.md untuk panduan lengkap.
+-->
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="mark">B</span> BeasiswaMatch</div>
+      <nav class="main-nav" id="mainNav">
+        <button data-view="beranda">Beranda</button>
+        <button data-view="cari">Cari Beasiswa</button>
+        <button data-view="tersimpan">Tersimpan</button>
+        <button data-view="profil">Profil Saya</button>
+        <button data-view="admin" id="navAdmin" class="hidden">Admin</button>
+        <button data-view="statistik" id="navStatistik" class="hidden">Statistik</button>
+      </nav>
+      <div class="nav-right">
+        <span class="pill" id="statusPill">Memuat…</span>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Buka menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <div class="empty"><div class="big">⏳</div>Memuat platform…</div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>BeasiswaMatch — proyek akhir mata kuliah laboratorium pemrograman. Prototipe MVP, bukan layanan resmi.</span>
+      <span>Selalu verifikasi info beasiswa ke penyelenggara resmi sebelum mendaftar.</span>
+    </div>
+  </footer>
+</div>
+
+<div id="modalRoot"></div>
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="chart-tooltip" id="chartTooltip"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
