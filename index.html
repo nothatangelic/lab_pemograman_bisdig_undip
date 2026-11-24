@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7ef">
+  <meta name="description" content="Dapurbagi — berbagi bahan dapur berlebih agar tidak terbuang.">
+  <title>Dapurbagi — Berbagi bahan, mengurangi terbuang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="./" aria-label="Dapurbagi beranda"><span class="brand-mark">d.</span><span>Dapur<span class="brand-accent">bagi</span></span></a>
+  <nav aria-label="Navigasi utama">
+    <button class="nav-btn active" data-view="browse"><span class="nav-icon">⌕</span> Jelajahi</button>
+    <button class="nav-btn" data-view="post"><span class="nav-icon">＋</span> Bagikan bahan</button>
+    <button class="nav-btn" data-view="mine"><span class="nav-icon">▤</span> Aktivitas saya</button>
+    <button class="nav-btn nav-login" id="navMasuk" data-view="auth">Masuk</button>
+    <button class="nav-btn nav-login" id="navKeluar" hidden>Keluar</button>
+  </nav>
+</header>
+
+<main>
+  <div id="setupWarn" class="notice" hidden>
+    <strong>Mode demo lokal:</strong> data hanya tersimpan di browser dan perangkat ini, bukan dibagikan ke pengguna lain.
+  </div>
+
+  <!-- JELAJAHI -->
+  <section id="view-browse">
+    <div class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="eyebrow-dot"></span> BERBAGI BAIK, MULAI DARI DAPUR</span>
+        <h1>Bahan berlebihmu,<br><span>berarti untuk orang lain.</span></h1>
+        <p class="lead">Punya bahan dapur yang belum sempat dipakai? Bagikan ke sekitar. Temukan bahan yang masih layak dan bantu kurangi makanan terbuang.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" type="button" data-view="post">＋ Bagikan bahan</button>
+          <a class="text-action" href="#discover">Jelajahi bahan <span>↗</span></a>
+        </div>
+        <div class="hero-note"><span class="note-icon">♡</span> Berbagi sederhana, dampak bermakna.</div>
+      </div>
+      <div class="hero-art" aria-label="Ilustrasi bahan makanan segar">
+        <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+        <div class="art-sun"></div>
+        <div class="food food-main">🥬</div>
+        <div class="food food-tomato">🍅</div>
+        <div class="food food-carrot">🥕</div>
+        <div class="food food-avocado">🥑</div>
+        <div class="art-label label-top"><span>✦</span> Masih layak, jangan dibuang</div>
+        <div class="art-label label-bottom"><span>🌱</span> Berawal dari sekitar kita</div>
+      </div>
+      <div class="hero-stamp"><span>SHARE</span><strong>GOOD<br>FOOD</strong><small>GOOD MOOD</small></div>
+    </div>
+
+    <section class="discover" id="discover">
+      <div class="section-heading">
+        <div><span class="eyebrow">TEMUKAN DI SEKITARMU</span><h2>Bahan yang tersedia</h2><p class="section-subtitle">Siapa tahu, kebutuhan dapurmu ada di dekatmu.</p></div>
+        <span class="result-pill">Dari komunitas <span>✳</span></span>
+      </div>
+      <div class="search-panel">
+        <div class="search-field"><span class="search-icon">⌕</span><input id="fCari" type="search" placeholder="Cari sayur, buah, bahan pokok..." aria-label="Cari bahan"></div>
+        <div class="select-field"><span>☷</span><select id="fKategori" aria-label="Filter kategori"><option value="">Semua kategori</option></select></div>
+      </div>
+      <div class="list-heading"><span>Yang bisa kamu temukan <span id="resultCount" class="count-badge">0 bahan</span></span><span class="list-hint">Prioritas untuk bahan yang segera kedaluwarsa</span></div>
+      <div id="list" class="grid"></div>
+    </section>
+  </section>
+
+  <!-- BAGIKAN -->
+  <section id="view-post" hidden>
+    <div class="page-intro"><span class="eyebrow">SEBARKAN KEBAIKAN</span><h1>Bagikan bahan dapur</h1><p class="lead">Bahan yang belum sempat kamu gunakan bisa jadi hal yang bermanfaat untuk orang lain.</p></div>
+    <div class="form-layout">
+      <div class="form-aside"><div class="aside-illustration">🥦</div><h2>Daripada terbuang,<br>lebih baik dibagikan.</h2><p>Isi informasi bahan dengan jelas agar orang di sekitarmu tahu apa yang tersedia.</p><div class="aside-tip"><span>✦</span><div><strong>Tips berbagi</strong><br>Pastikan bahan masih layak dan jelaskan kondisi penyimpanannya.</div></div></div>
+      <form id="postForm" class="form form-card">
+        <div class="form-title"><span class="step-number">01</span><div><h2>Informasi bahan</h2><p>Lengkapi detail bahan yang ingin kamu bagikan.</p></div></div>
+        <label>Nama bahan <input name="nama_bahan" required maxlength="80" placeholder="Contoh: Bayam segar"></label>
+        <div class="form-two-col">
+          <label>Kategori <select name="kategori" id="pKategori" required></select></label>
+          <label>Jumlah <input name="jumlah" required maxlength="40" placeholder="2 ikat / 500 gram"></label>
+        </div>
+        <label>Tanggal kedaluwarsa <input name="tanggal_kedaluwarsa" type="date" required></label>
+        <label>Area pengambilan <input name="area" required maxlength="80" placeholder="Contoh: Sekitar kampus Tembalang"><small>Tulis area umum saja, jangan alamat lengkap.</small></label>
+        <label>Catatan kondisi <textarea name="deskripsi" rows="3" maxlength="300" placeholder="Contoh: Disimpan di kulkas, belum dibuka"></textarea></label>
+        <label>Foto bahan <input name="foto" type="file" accept="image/*"><small>Opsional · Maksimal 900 KB untuk penyimpanan lokal.</small></label>
+        <button class="btn btn-primary btn-wide" type="submit">Publikasikan bahan <span>→</span></button>
+      </form>
+    </div>
+  </section>
+
+  <!-- AKTIVITAS -->
+  <section id="view-mine" hidden>
+    <div class="page-intro"><span class="eyebrow">RUANG PRIBADIMU</span><h1>Aktivitas saya</h1><p class="lead">Pantau bahan yang kamu bagikan dan permintaan yang kamu kirim.</p></div>
+    <div class="activity-grid"><div class="activity-panel"><div class="panel-heading"><span class="panel-icon">↗</span><div><h2>Bahan yang saya bagikan</h2><p>Kelola bahan yang kamu tawarkan.</p></div></div><div id="myItems" class="stack"></div></div><div class="activity-panel"><div class="panel-heading"><span class="panel-icon">♡</span><div><h2>Permintaan saya</h2><p>Lihat perkembangan permintaanmu.</p></div></div><div id="myRequests" class="stack"></div></div></div>
+  </section>
+
+  <!-- MASUK / DAFTAR -->
+  <section id="view-auth" hidden>
+    <div class="auth-wrap">
+      <div class="auth-art"><span class="eyebrow">SENANG BISA BERBAGI</span><div class="auth-emoji">🍋🥬🍅</div><h2>Satu bahan kecil,<br>bisa membawa kebaikan.</h2><p>Bergabunglah dan mulai berbagi bahan dapur dengan orang-orang di sekitarmu.</p></div>
+      <div class="auth form-card">
+        <form id="loginForm" class="form">
+          <span class="eyebrow">SELAMAT DATANG KEMBALI</span><h1>Masuk ke Dapurbagi</h1><p class="form-desc">Lanjutkan kebiasaan baikmu hari ini.</p>
+          <label>Email <input name="email" type="email" required autocomplete="email" placeholder="nama@email.com"></label>
+          <label>Kata sandi <input name="password" type="password" required autocomplete="current-password" placeholder="Masukkan kata sandi"></label>
+          <button class="btn btn-primary btn-wide" type="submit">Masuk <span>→</span></button>
+          <button class="link" type="button" id="toRegister">Belum punya akun? <strong>Daftar sekarang</strong></button>
+        </form>
+        <form id="registerForm" class="form" hidden>
+          <span class="eyebrow">MULAI BERBAGI</span><h1>Buat akun baru</h1><p class="form-desc">Hanya butuh beberapa informasi.</p>
+          <label>Nama <input name="nama" required maxlength="40" autocomplete="name" placeholder="Nama kamu"></label>
+          <label>Email <input name="email" type="email" required autocomplete="email" placeholder="nama@email.com"></label>
+          <label>Kata sandi <input name="password" type="password" required minlength="6" autocomplete="new-password" placeholder="Minimal 6 karakter"><small>Minimal 6 karakter.</small></label>
+          <button class="btn btn-primary btn-wide" type="submit">Buat akun <span>→</span></button>
+          <button class="link" type="button" id="toLogin">Sudah punya akun? <strong>Masuk</strong></button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="footer-inner"><a class="brand footer-brand" href="./"><span class="brand-mark">d.</span><span>Dapur<span class="brand-accent">bagi</span></span></a><p>Berbagi bahan, mengurangi yang terbuang.</p><small>Periksa kondisi bahan sebelum dikonsumsi. Dapurbagi hanya mempertemukan pemberi dan penerima, dan tidak menjamin kelayakan bahan.</small><span class="footer-copy">© 2026 Dapurbagi · Dibuat untuk saling berbagi ♡</span></div></footer>
+
+<dialog id="reqDialog">
+  <form id="reqForm" class="form dialog-form">
+    <span class="eyebrow">SATU LANGKAH LAGI</span><h2>Minta bahan ini</h2><p class="form-desc">Sampaikan pesan singkat kepada pemberi bahan.</p>
+    <label>Pesan untuk pemberi (opsional)<textarea name="pesan" rows="2" maxlength="200" placeholder="Contoh: Bisa ambil sore ini"></textarea></label>
+    <label>Kontak yang bisa dihubungi<input name="kontak" required maxlength="60" placeholder="Nomor WhatsApp atau ID Instagram"><small>Hanya dilihat pemberi bahan ini.</small></label>
+    <div class="actions"><button class="btn btn-primary" type="submit">Kirim permintaan</button><button class="btn ghost" type="button" id="reqCancel">Batal</button></div>
+  </form>
+</dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>
