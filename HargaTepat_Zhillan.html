@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HargaTepat – Hitung Harga Jual UMKM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+:root{--bg:#eef3f0;--card:#fff;--ink:#15241d;--muted:#566860;--line:#d3ddd8;--primary:#0e6b52;--pink:#fff;--hero:#0a3b30;--accent:#f2b134;--accent-ink:#2a1d00;
+--warn:#8a5200;--warn-bg:#fff1d6;--bad:#a4261c;--bad-bg:#fde4e1;--ok:#0e6b52;--ok-bg:#dff3ea;--b1:#0e6b52;--b2:#5bb39b;--b3:#f2b134;--b4:#8b9a93}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1511;--card:#16211b;--ink:#e8f0ec;--muted:#9db0a6;--line:#2a3b33;--primary:#4cc9a0;--pink:#06261c;--warn:#ffcf7a;--warn-bg:#3a2c0e;--bad:#ffa59c;--bad-bg:#3d1b17;--ok:#7fe0bd;--ok-bg:#14352a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Plus Jakarta Sans",system-ui,sans-serif}
+.wrap,main,footer,nav{max-width:860px;margin:0 auto;padding:0 16px}
+header{background:var(--hero);color:#fff;padding:36px 0 40px}
+header h1{font-size:2.3rem;line-height:1.1;font-weight:800;margin:0 0 10px;letter-spacing:-.01em;max-width:15ch}
+header p{margin:0 0 20px;color:#bfd8cf;max-width:46ch}
+.brand{font-weight:700;color:var(--accent);margin-bottom:12px}
+.cta{background:var(--accent);color:var(--accent-ink);border:0;padding:13px 20px;border-radius:10px;font-weight:800;font-size:1rem;transition:transform .15s}
+.cta:hover{transform:translateY(-2px)}
+.cta2{background:transparent;color:#fff;border:1px solid #4d7a6c;padding:12px 18px;border-radius:10px;font-weight:600;margin-left:8px}
+nav{position:sticky;top:0;z-index:5;display:flex;gap:6px;overflow-x:auto;padding:10px 16px;background:var(--bg)}
+nav button{flex:1 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:10px 14px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer}
+nav button.on{background:var(--primary);color:var(--pink);border-color:var(--primary)}
+nav button.done::after{content:" ✓";font-weight:800}
+h2{font-size:1.2rem;margin:26px 0 4px}
+.hint{color:var(--muted);font-size:.92rem;margin:0 0 12px;max-width:62ch}
+main section:not([hidden]){animation:in .25s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(6px)}}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+@media(min-width:640px){.grid{grid-template-columns:1fr 1fr}.wide{grid-column:1/-1}}
+label{display:grid;gap:4px;font-size:.88rem;font-weight:600}
+input,select{font:inherit;padding:11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%}
+input:focus,select:focus{border-color:var(--primary)}
+fieldset{border:1px solid var(--line);border-radius:10px;padding:12px;margin:0}
+legend{font-weight:600;font-size:.88rem;padding:0 6px}
+.row{display:grid;grid-template-columns:1fr 90px 40px 36px;gap:8px;align-items:center;margin-bottom:8px}
+.row span{color:var(--muted);font-size:.9rem}
+button{font:inherit;cursor:pointer}
+button.primary{grid-column:1/-1;background:var(--primary);color:var(--pink);border:0;padding:13px;border-radius:10px;font-weight:700}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);padding:8px 12px;border-radius:8px}
+button.danger{color:var(--bad)}
+button.x{border:0;background:transparent;color:var(--bad);font-size:1.1rem;padding:4px 8px}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+.list{margin-top:12px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--primary);border-radius:10px;padding:10px 12px;margin-bottom:6px}
+.item small{color:var(--muted);display:block}
+.empty{color:var(--muted);padding:12px 0}
+.sim{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.sim input{padding:0;accent-color:var(--primary)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat b{display:block;font-size:1.35rem}
+.stat span{color:var(--muted);font-size:.85rem}
+.card{background:var(--card);border:1px dashed var(--muted);border-radius:14px;padding:18px;margin-bottom:14px}
+.card h3{margin:0 0 6px;font-size:1.15rem}
+.big{background:var(--accent);color:var(--accent-ink);border-radius:10px;padding:12px 14px;margin:8px 0 12px}
+.big span{font-size:.85rem;font-weight:600;display:block}
+.big b{font-size:2rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--line);margin-top:6px}
+.bar i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.82rem;color:var(--muted);margin:8px 0 12px}
+.legend u{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;text-decoration:none}
+.b1{background:var(--b1)}.b2{background:var(--b2)}.b3{background:var(--b3)}.b4{background:var(--b4)}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.82rem;font-weight:700;margin:4px 0}
+.badge.bad{background:var(--bad-bg);color:var(--bad)}.badge.warn{background:var(--warn-bg);color:var(--warn)}.badge.ok{background:var(--ok-bg);color:var(--ok)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px dashed var(--line);white-space:nowrap}
+td.n,th.n{text-align:right}
+.note{color:var(--muted);font-size:.85rem;margin:8px 0 0}
+footer{margin:32px auto;padding-bottom:24px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+footer p{flex:1 0 100%;margin:0;color:var(--muted);font-size:.88rem}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--hero);color:#fff;padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;max-width:90vw;text-align:center;z-index:9}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+</style>
+</head>
+<body>
+  <header><div class="wrap">
+    <div class="brand">HargaTepat</div>
+    <h1>Harga jual yang tidak bikin rugi</h1>
+    <p>Masukkan bahan, resep, dan biaya usaha. Dapatkan harga per kanal penjualan, lengkap dengan komisi platform.</p>
+    <button class="cta" id="heroDemo">Coba dengan data contoh</button>
+    <button class="cta2" id="heroMulai">Mulai dari awal</button>
+  </div></header>
+
+  <nav id="tabs" aria-label="Langkah">
+    <button data-tab="bahan" class="on">1. Bahan</button>
+    <button data-tab="produk">2. Produk</button>
+    <button data-tab="biaya">3. Biaya &amp; kanal</button>
+    <button data-tab="hasil">4. Hasil</button>
+  </nav>
+
+  <main>
+    <section id="tab-bahan">
+      <h2>Bahan baku</h2>
+      <p class="hint">Masukkan harga dan jumlah sesuai struk belanja. Aplikasi mengubahnya ke satuan dasar (gram, ml, atau pcs).</p>
+      <form id="fBahan" class="grid">
+        <label>Nama bahan <input name="nama" required placeholder="Kopi arabika"></label>
+        <label>Harga beli (Rp) <input name="harga" type="number" min="1" step="any" required></label>
+        <label>Jumlah dibeli <input name="jumlah" type="number" min="0.0001" step="any" required></label>
+        <label>Satuan
+          <select name="satuan">
+            <option value="kg">kg</option><option value="g">gram</option>
+            <option value="l">liter</option><option value="ml">ml</option>
+            <option value="pcs">pcs</option>
+          </select>
+        </label>
+        <button class="primary">Simpan bahan</button>
+      </form>
+      <div id="listBahan"></div>
+    </section>
+
+    <section id="tab-produk" hidden>
+      <h2>Produk dan resep</h2>
+      <p class="hint">Isi resep untuk satu kali produksi (satu batch).</p>
+      <form id="fProduk" class="grid">
+        <label>Nama produk <input name="nama" required placeholder="Es kopi susu"></label>
+        <label>Hasil per batch (unit) <input name="hasil" type="number" min="1" step="any" required></label>
+        <label>Tenaga kerja per batch (Rp) <input name="tenaga" type="number" min="0" step="any" value="0"></label>
+        <label>Kemasan per unit (Rp) <input name="kemasan" type="number" min="0" step="any" value="0"></label>
+        <label>Margin target (%) <input name="margin" type="number" min="1" max="90" step="any" value="40" required></label>
+        <label>Produksi per bulan (unit) <input name="produksi" type="number" min="1" step="any" required></label>
+        <label>Harga jual saat ini (Rp, boleh kosong) <input name="hargaNow" type="number" min="0" step="any"></label>
+        <fieldset class="wide">
+          <legend>Resep</legend>
+          <div id="resep"></div>
+          <button type="button" id="addRow" class="ghost">+ Tambah bahan</button>
+        </fieldset>
+        <button class="primary">Simpan produk</button>
+      </form>
+      <div id="listProduk"></div>
+    </section>
+
+    <section id="tab-biaya" hidden>
+      <h2>Biaya tetap bulanan</h2>
+      <p class="hint">Sewa, listrik, gas, internet, dan biaya lain yang tetap ada walau penjualan sepi.</p>
+      <form id="fFixed" class="grid">
+        <label>Nama biaya <input name="nama" required placeholder="Sewa tempat"></label>
+        <label>Nominal per bulan (Rp) <input name="nominal" type="number" min="1" step="any" required></label>
+        <button class="primary">Simpan biaya</button>
+      </form>
+      <div id="listFixed"></div>
+
+      <h2>Kanal penjualan</h2>
+      <p class="hint">Komisi platform bisa berubah. Perbarui angkanya jika ada kebijakan baru. Penjualan langsung sudah otomatis dihitung.</p>
+      <form id="fKanal" class="grid">
+        <label>Nama kanal <input name="nama" required placeholder="ShopeeFood"></label>
+        <label>Komisi (%) <input name="komisi" type="number" min="0" max="90" step="any" required></label>
+        <button class="primary">Simpan kanal</button>
+      </form>
+      <div id="listKanal"></div>
+    </section>
+
+    <section id="tab-hasil" hidden>
+      <h2>Hasil perhitungan</h2>
+      <div class="sim"><label for="simRange">Simulasi: harga bahan naik <output id="simVal">0%</output></label>
+        <input id="simRange" type="range" min="0" max="50" step="5" value="0"><p class="note" id="simNote">Geser untuk melihat dampaknya pada HPP dan harga.</p></div>
+      <div id="ringkasan"></div>
+      <div id="hasil"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Data tersimpan di browser perangkat ini saja.</p>
+    <button id="btnContoh" class="ghost">Muat data contoh</button>
+    <button id="btnReset" class="ghost danger">Hapus semua data</button>
+  </footer>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script>
+"use strict";
+
+/* ---------- Data & penyimpanan (localStorage, per browser) ---------- */
+const KEY = "hargatepat.v1";
+const UNIT = {
+  kg: { b: "g", f: 1000 }, g: { b: "g", f: 1 },
+  l: { b: "ml", f: 1000 }, ml: { b: "ml", f: 1 }, pcs: { b: "pcs", f: 1 }
+};
+const empty = () => ({ bahan: [], produk: [], fixed: [], kanal: [] });
+
+function load() {
+  try {
+    const d = JSON.parse(localStorage.getItem(KEY));
+    if (d && d.bahan && d.produk && d.fixed && d.kanal) return d;
+  } catch (e) { /* data kosong atau rusak */ }
+  return empty();
+}
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* penyimpanan penuh atau diblokir */ }
+}
+let S = load();
+let sim = 0;
+function toast(m) {
+  const t = document.querySelector("#toast");
+  t.textContent = m; t.classList.add("on");
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("on"), 3200);
+}
+
+/* ---------- Helper ---------- */
+const $ = (s) => document.querySelector(s);
+const num = (v) => parseFloat(v) || 0;
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const rp = (n) => "Rp" + Math.round(n).toLocaleString("id-ID");
+const dec = (n) => n.toLocaleString("id-ID", { maximumFractionDigits: 2 });
+const roundUp = (x) => Math.ceil(x / 100) * 100;
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+/* ---------- Perhitungan inti (dipisah dari tampilan agar mudah diuji) ---------- */
+function calc(p) {
+  const bahanBatch = p.resep.reduce((t, r) => {
+    const b = S.bahan.find((x) => x.id === r.id);
+    return t + (b ? b.hargaDasar * (1 + sim / 100) * r.qty : 0);
+  }, 0);
+  const bahanU = bahanBatch / p.hasil, tenagaU = p.tenaga / p.hasil;
+  const variabel = bahanU + tenagaU + p.kemasan;
+  const totalFixed = S.fixed.reduce((t, f) => t + f.nominal, 0);
+  const totalProd = S.produk.reduce((t, x) => t + x.produksi, 0);
+  const alok = totalProd ? totalFixed / totalProd : 0;
+  const hpp = variabel + alok;
+  const harga = (komisi) => {
+    const d = 1 - p.margin / 100 - komisi / 100;
+    return d > 0 ? roundUp(hpp / d) : null;
+  };
+  const langsung = harga(0);
+  const kontribusi = langsung === null ? 0 : langsung - variabel;
+  const bep = kontribusi > 0 ? Math.ceil(totalFixed / kontribusi) : null;
+  return { bahanU, tenagaU, variabel, alok, hpp, harga, langsung, bep, totalFixed };
+}
+
+/* ---------- Tab ---------- */
+document.querySelectorAll("#tabs button").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b === btn));
+    ["bahan", "produk", "biaya", "hasil"].forEach((t) => { $("#tab-" + t).hidden = t !== btn.dataset.tab; });
+    if (btn.dataset.tab === "hasil") renderHasil();
+  });
+});
+
+/* ---------- Bahan ---------- */
+$("#fBahan").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.target;
+  const u = UNIT[f.satuan.value];
+  const harga = num(f.harga.value), jumlah = num(f.jumlah.value);
+  if (harga <= 0 || jumlah <= 0) return toast("Harga dan jumlah harus lebih dari 0.");
+  S.bahan.push({
+    id: uid(), nama: f.nama.value.trim(), harga, jumlah, satuan: f.satuan.value,
+    base: u.b, hargaDasar: harga / (jumlah * u.f)
+  });
+  save(); f.reset(); renderAll(); toast("Tersimpan");
+});
+
+function renderBahan() {
+  $("#listBahan").innerHTML = S.bahan.length
+    ? '<div class="list">' + S.bahan.map((b) => `
+      <div class="item"><div><b>${esc(b.nama)}</b>
+        <small>${rp(b.harga)} per ${dec(b.jumlah)} ${b.satuan} (sekitar ${rp0(b.hargaDasar)} per ${b.base})</small></div>
+        <button class="x" data-del="bahan:${b.id}" aria-label="Hapus ${esc(b.nama)}">✕</button></div>`).join("") + "</div>"
+    : '<p class="empty">Belum ada bahan. Tambahkan bahan pertama Anda di atas.</p>';
+}
+const rp0 = (n) => "Rp" + dec(n);
+
+/* ---------- Produk & resep ---------- */
+function addRow(id, qty) {
+  if (!S.bahan.length) return toast("Tambahkan bahan baku dulu di langkah 1.");
+  const row = document.createElement("div");
+  row.className = "row";
+  row.innerHTML = `<select aria-label="Bahan">${S.bahan.map((b) =>
+    `<option value="${b.id}">${esc(b.nama)}</option>`).join("")}</select>
+    <input type="number" min="0" step="any" aria-label="Jumlah dipakai" placeholder="Jumlah">
+    <span></span><button type="button" class="x" aria-label="Hapus baris">✕</button>`;
+  const sel = row.querySelector("select"), inp = row.querySelector("input"), lab = row.querySelector("span");
+  const upd = () => { const b = S.bahan.find((x) => x.id === sel.value); lab.textContent = b ? b.base : ""; };
+  if (id) sel.value = id;
+  if (qty) inp.value = qty;
+  sel.addEventListener("change", upd); upd();
+  row.querySelector("button").addEventListener("click", () => row.remove());
+  $("#resep").appendChild(row);
+}
+$("#addRow").addEventListener("click", () => addRow());
+
+$("#fProduk").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.target;
+  const resep = [...document.querySelectorAll("#resep .row")]
+    .map((r) => ({ id: r.querySelector("select").value, qty: num(r.querySelector("input").value) }))
+    .filter((r) => r.id && r.qty > 0);
+  if (!resep.length) return toast("Tambahkan minimal satu bahan pada resep.");
+  const margin = num(f.margin.value);
+  if (margin <= 0 || margin >= 100) return toast("Margin harus di antara 1 dan 99.");
+  S.produk.push({
+    id: uid(), nama: f.nama.value.trim(), hasil: num(f.hasil.value), tenaga: num(f.tenaga.value),
+    kemasan: num(f.kemasan.value), margin, produksi: num(f.produksi.value),
+    hargaNow: num(f.hargaNow.value), resep
+  });
+  save(); f.reset(); f.margin.value = 40; f.tenaga.value = 0; f.kemasan.value = 0;
+  $("#resep").innerHTML = ""; renderAll(); toast("Produk tersimpan");
+});
+
+function renderProduk() {
+  $("#listProduk").innerHTML = S.produk.length
+    ? '<div class="list">' + S.produk.map((p) => `
+      <div class="item"><div><b>${esc(p.nama)}</b>
+        <small>${p.resep.length} bahan, hasil ${dec(p.hasil)} unit per batch, margin target ${dec(p.margin)}%</small></div>
+        <button class="x" data-del="produk:${p.id}" aria-label="Hapus ${esc(p.nama)}">✕</button></div>`).join("") + "</div>"
+    : '<p class="empty">Belum ada produk. Buat produk pertama Anda di atas.</p>';
+}
+
+/* ---------- Biaya tetap & kanal ---------- */
+$("#fFixed").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.target;
+  S.fixed.push({ id: uid(), nama: f.nama.value.trim(), nominal: num(f.nominal.value) });
+  save(); f.reset(); renderAll(); toast("Tersimpan");
+});
+$("#fKanal").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.target;
+  const komisi = num(f.komisi.value);
+  if (komisi < 0 || komisi >= 90) return toast("Komisi harus di antara 0 dan 89.");
+  S.kanal.push({ id: uid(), nama: f.nama.value.trim(), komisi });
+  save(); f.reset(); renderAll(); toast("Tersimpan");
+});
+
+function renderBiaya() {
+  const total = S.fixed.reduce((t, x) => t + x.nominal, 0);
+  $("#listFixed").innerHTML = S.fixed.length
+    ? '<div class="list">' + S.fixed.map((x) => `
+      <div class="item"><div><b>${esc(x.nama)}</b><small>${rp(x.nominal)} per bulan</small></div>
+        <button class="x" data-del="fixed:${x.id}" aria-label="Hapus ${esc(x.nama)}">✕</button></div>`).join("") +
+      `</div><p class="note">Total biaya tetap: ${rp(total)} per bulan</p>`
+    : '<p class="empty">Belum ada biaya tetap. Jika tidak ada, hasil dihitung tanpa biaya tetap.</p>';
+  $("#listKanal").innerHTML = S.kanal.length
+    ? '<div class="list">' + S.kanal.map((k) => `
+      <div class="item"><div><b>${esc(k.nama)}</b><small>Komisi ${dec(k.komisi)}%</small></div>
+        <button class="x" data-del="kanal:${k.id}" aria-label="Hapus ${esc(k.nama)}">✕</button></div>`).join("") + "</div>"
+    : '<p class="empty">Belum ada kanal. Hasil hanya menampilkan harga penjualan langsung.</p>';
+}
+
+/* ---------- Hapus (delegasi event) ---------- */
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-del]");
+  if (!t) return;
+  const [jenis, id] = t.dataset.del.split(":");
+  if (jenis === "bahan" && S.produk.some((p) => p.resep.some((r) => r.id === id)))
+    return toast("Bahan ini dipakai di resep produk. Hapus produknya dulu.");
+  S[jenis] = S[jenis].filter((x) => x.id !== id);
+  save(); renderAll();
+});
+
+/* ---------- Hasil ---------- */
+function renderHasil() {
+  if (!S.produk.length) {
+    $("#ringkasan").innerHTML = "";
+    $("#hasil").innerHTML = '<p class="empty">Belum ada produk. Isi langkah 1 sampai 3, atau muat data contoh di bagian bawah halaman.</p>';
+    return;
+  }
+  let rugi = 0;
+  const cards = S.produk.map((p) => {
+    const c = calc(p);
+    let badge = "";
+    if (p.hargaNow > 0) {
+      if (p.hargaNow < c.hpp) {
+        rugi++;
+        badge = `<span class="badge bad">Dijual di bawah HPP: rugi ${rp(c.hpp - p.hargaNow)} per unit</span>`;
+      } else if (c.langsung !== null && p.hargaNow < c.langsung) {
+        const m = ((p.hargaNow - c.hpp) / p.hargaNow) * 100;
+        badge = `<span class="badge warn">Di atas HPP, tetapi margin ${dec(m)}% (target ${dec(p.margin)}%)</span>`;
+      } else {
+        badge = '<span class="badge ok">Harga saat ini sudah mencapai target margin</span>';
+      }
+    }
+    const baris = [{ nama: "Penjualan langsung", komisi: 0 }, ...S.kanal].map((k) => {
+      const h = c.harga(k.komisi);
+      return h === null
+        ? `<tr><td>${esc(k.nama)}</td><td class="n">${dec(k.komisi)}%</td><td class="n" colspan="2">Tidak dapat dihitung (margin + komisi ≥ 100%)</td></tr>`
+        : `<tr><td>${esc(k.nama)}</td><td class="n">${dec(k.komisi)}%</td><td class="n"><b>${rp(h)}</b></td><td class="n">${rp(h * (1 - k.komisi / 100) - c.hpp)}</td></tr>`;
+    }).join("");
+    const bep = c.bep === null
+      ? "Titik impas tidak dapat dihitung."
+      : `Titik impas: ${c.bep.toLocaleString("id-ID")} unit per bulan (sekitar ${Math.ceil(c.bep / 30)} per hari), dengan asumsi hanya produk ini yang dijual dan harga penjualan langsung.`;
+    return `<div class="card"><h3>${esc(p.nama)}</h3>${badge}<div class="big"><span>Harga jual langsung (margin ${dec(p.margin)}%)</span><b>${c.langsung === null ? "–" : rp(c.langsung)}</b></div>${bar(p, c)}
+      <p>HPP per unit: <b>${rp(c.hpp)}</b>
+        <span class="note">(biaya variabel ${rp(c.variabel)} + alokasi biaya tetap ${rp(c.alok)})</span></p>
+      <div class="scroll"><table><thead><tr><th>Kanal</th><th class="n">Komisi</th>
+        <th class="n">Harga rekomendasi</th><th class="n">Laba per unit</th></tr></thead><tbody>${baris}</tbody></table></div>
+      <p class="note">${bep}</p></div>`;
+  }).join("");
+  const totalFixed = S.fixed.reduce((t, x) => t + x.nominal, 0);
+  $("#ringkasan").innerHTML = `<div class="stats">
+    <div class="stat"><b>${S.produk.length}</b><span>Produk</span></div>
+    <div class="stat"><b>${rp(totalFixed)}</b><span>Biaya tetap per bulan</span></div>
+    <div class="stat"><b>${rugi}</b><span>Produk dijual di bawah HPP</span></div></div>`;
+  $("#hasil").innerHTML = cards +
+    '<p class="note">Harga dibulatkan ke atas ke kelipatan Rp100. Alokasi biaya tetap dibagi rata ke seluruh unit produksi bulanan semua produk.</p>';
+}
+
+/* ---------- Data contoh & reset ---------- */
+$("#btnContoh").addEventListener("click", () => {
+  if ((S.bahan.length || S.produk.length) && !confirm("Data saat ini akan diganti dengan data contoh. Lanjutkan?")) return;
+  const b = (nama, harga, jumlah, satuan) => {
+    const u = UNIT[satuan];
+    return { id: uid(), nama, harga, jumlah, satuan, base: u.b, hargaDasar: harga / (jumlah * u.f) };
+  };
+  const kopi = b("Kopi arabika", 180000, 1, "kg"), susu = b("Susu UHT", 18000, 1, "l"), aren = b("Gula aren cair", 30000, 1, "l");
+  S = {
+    bahan: [kopi, susu, aren],
+    produk: [{
+      id: uid(), nama: "Es kopi susu", hasil: 10, tenaga: 10000, kemasan: 1000, margin: 40,
+      produksi: 1500, hargaNow: 8000,
+      resep: [{ id: kopi.id, qty: 150 }, { id: susu.id, qty: 1000 }, { id: aren.id, qty: 200 }]
+    }],
+    fixed: [{ id: uid(), nama: "Sewa tempat", nominal: 1000000 }, { id: uid(), nama: "Listrik dan gas", nominal: 500000 }],
+    kanal: [{ id: uid(), nama: "Aplikasi pesan-antar (contoh)", komisi: 20 }]
+  };
+  save(); renderAll();
+});
+$("#btnReset").addEventListener("click", () => {
+  if (!confirm("Semua data di browser ini akan dihapus. Lanjutkan?")) return;
+  S = empty(); save(); renderAll();
+});
+
+function bar(p, c) {
+  const parts = [["Bahan", c.bahanU, "b1"], ["Tenaga", c.tenagaU, "b2"], ["Kemasan", p.kemasan, "b3"], ["Biaya tetap", c.alok, "b4"]];
+  return '<div class="bar">' + parts.map((x) => `<i class="${x[2]}" style="width:${(x[1] / (c.hpp || 1)) * 100}%"></i>`).join("") +
+    '</div><div class="legend">' + parts.map((x) => `<span><u class="${x[2]}"></u>${x[0]} ${rp(x[1])}</span>`).join("") + "</div>";
+}
+$("#simRange").addEventListener("input", (e) => {
+  sim = num(e.target.value);
+  $("#simVal").textContent = sim + "%";
+  $("#simNote").textContent = sim ? `Simulasi aktif: semua harga bahan naik ${sim}%. Angka di bawah sudah menyesuaikan.` : "Geser untuk melihat dampaknya pada HPP dan harga.";
+  renderHasil();
+});
+$("#heroDemo").addEventListener("click", () => {
+  $("#btnContoh").click();
+  document.querySelector('#tabs [data-tab="hasil"]').click();
+  $("#tabs").scrollIntoView();
+});
+$("#heroMulai").addEventListener("click", () => $("#tabs").scrollIntoView());
+function renderAll() {
+  renderBahan(); renderProduk(); renderBiaya(); renderHasil();
+  const d = { bahan: S.bahan.length, produk: S.produk.length, biaya: S.fixed.length || S.kanal.length, hasil: S.produk.length };
+  document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("done", !!d[b.dataset.tab]));
+}
+renderAll();
+
+</script>
+</body>
+</html>
